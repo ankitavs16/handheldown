@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client'
 import App from './App'
 import { StoreProvider } from './store'
 import { getVariant } from './variant'
+import { initMode } from './mode'
 import './index.css'
 
 const variant = getVariant()
@@ -13,6 +14,7 @@ el.style.setProperty('--color-coraldeep', variant.accentDeep)
 el.style.setProperty('--color-blush', variant.blush)
 document.title = variant.name
 window.__APP_VARIANT__ = variant
+initMode()
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>

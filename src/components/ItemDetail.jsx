@@ -1,16 +1,13 @@
-import { useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useStore } from '../store'
+import { money } from '../payment'
 
 export default function ItemDetail() {
   const { id } = useParams()
   const navigate = useNavigate()
-  const { items, claims, requests, currentUser, claimItem, requestItem } = useStore()
+  const { items, claims, currentUser, claimItem } = useStore()
 
   const item = items.find((i) => i.id === id)
-  const [showRequestForm, setShowRequestForm] = useState(false)
-  const [note, setNote] = useState('')
-  const [error, setError] = useState('')
 
   if (!item || item.isDonation) {
     return <div className="p-6 text-inksoft">Item not found.</div>
@@ -19,25 +16,14 @@ export default function ItemDetail() {
   const claim = claims.find((c) => c.itemId === id)
   const isOwner = currentUser && item.postedBy === currentUser.name
   const canClaim = !claim && !isOwner
-  const myPendingRequest = requests.find((r) => r.itemId === id && r.by.name === currentUser?.name)
+  const amount = Number(item.price) || 0
 
   const handleClaim = () => {
     if (!currentUser) return navigate('/')
     if (claim) return navigate('/too-slow')
+    if (amount > 0) return navigate(`/checkout/${id}`)
     claimItem(id, { name: currentUser.name, room: currentUser.room })
     navigate('/done')
-  }
-
-  const handleRequest = () => {
-    if (!currentUser) return navigate('/')
-    if (!note.trim()) return setError('Add a quick note so the poster knows who you are.')
-    requestItem({
-      id: `req-${Date.now()}`,
-      itemId: id,
-      by: { name: currentUser.name, room: currentUser.room },
-      note: note.trim(),
-    })
-    navigate('/requested')
   }
 
   return (
@@ -50,11 +36,6 @@ export default function ItemDetail() {
         >
           ‹
         </button>
-        {item.isDonation && (
-          <span className="absolute top-3 right-3 bg-sun text-white rounded-full px-3 py-1 text-xs font-bold shadow-sm">
-            ♥ Free
-          </span>
-        )}
       </div>
 
       <div className="px-4 -mt-6 relative">
@@ -68,6 +49,13 @@ export default function ItemDetail() {
           <div className="mt-4">
             <h3 className="font-display font-semibold text-sm text-inksoft">About it</h3>
             <p className="text-sm text-ink mt-1 leading-relaxed">{item.description}</p>
+          </div>
+
+          <div className="mt-4 bg-paper rounded-xl p-3 flex items-center justify-between">
+            <span className="text-sm text-inksoft">Price</span>
+            <span className="font-display font-extrabold text-2xl text-coral">
+              {amount > 0 ? money(amount) : 'Free 🎁'}
+            </span>
           </div>
 
           <div className="mt-4 bg-paper rounded-xl p-3 flex items-center gap-3">
@@ -98,66 +86,19 @@ export default function ItemDetail() {
                 Head to your My Items page when it gets picked up, and mark it done.
               </p>
             </div>
-          ) : myPendingRequest ? (
-            <div className="tag-card bg-sun/15 border-2 border-sun rounded-tag p-4 text-center">
-              <h2 className="font-display font-bold text-lg">Request sent 💌</h2>
-              <p className="text-sm text-inksoft mt-1">
-                The poster will see your note. If they say yes, it's yours!
-              </p>
-            </div>
           ) : canClaim ? (
             <>
               <button
                 onClick={handleClaim}
                 className="btn btn-lg rounded-full w-full bg-coral border-coral text-white font-display font-bold shadow-card hover:bg-coraldeep"
               >
-                🏷&nbsp;&nbsp;I want this!
+                🏷&nbsp;&nbsp;{amount > 0 ? `I want this — ${money(amount)}` : 'I want this! — Free'}
               </button>
 
-              <div className="mt-3">
-                {!showRequestForm ? (
-                  <button
-                    onClick={() => setShowRequestForm(true)}
-                    className="btn btn-lg rounded-full w-full bg-paper border-cream text-ink font-display font-bold hover:border-coral"
-                  >
-                    💌&nbsp;&nbsp;Or request it instead
-                  </button>
-                ) : (
-                  <div className="bg-sand rounded-tag shadow-card p-4">
-                    <label className="font-display font-semibold text-sm text-ink">
-                      A note for {item.postedBy}
-                    </label>
-                    <textarea
-                      value={note}
-                      onChange={(e) => {
-                        setNote(e.target.value)
-                        setError('')
-                      }}
-                      rows={3}
-                      placeholder="e.g. I'd love this for my little sister — can I pick it up Thursday?"
-                      className="textarea textarea-bordered w-full rounded-xl bg-paper border-cream focus:border-coral focus:outline-none mt-1"
-                    />
-                    {error && <p className="text-xs text-red-500 mt-1">{error}</p>}
-                    <div className="flex gap-2 mt-2">
-                      <button
-                        onClick={handleRequest}
-                        className="btn btn-sm rounded-full flex-1 bg-sun border-sun text-white font-display font-bold hover:opacity-90"
-                      >
-                        Send request
-                      </button>
-                      <button
-                        onClick={() => setShowRequestForm(false)}
-                        className="btn btn-sm rounded-full flex-1 bg-cream border-cream text-inksoft"
-                      >
-                        Cancel
-                      </button>
-                    </div>
-                  </div>
-                )}
-              </div>
-
               <p className="text-center text-xs text-inksoft mt-3">
-                First come, first served — claim fast! Or request, and the poster decides.
+                {amount > 0
+                  ? `First come, first served. You'll pay ${currentUser ? 'at a secure checkout' : 'after signing in'}.`
+                  : 'First come, first served — claim fast!'}
               </p>
             </>
           ) : (

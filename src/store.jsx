@@ -30,10 +30,9 @@ function initial() {
       user: saved.user ?? null,
       items: Array.isArray(saved.items) ? saved.items : SEED_ITEMS,
       claims: Array.isArray(saved.claims) ? saved.claims : [],
-      requests: Array.isArray(saved.requests) ? saved.requests : [],
     }
   }
-  return { user: null, items: SEED_ITEMS, claims: [], requests: [] }
+  return { user: null, items: SEED_ITEMS, claims: [] }
 }
 
 function reducer(state, action) {
@@ -47,23 +46,9 @@ function reducer(state, action) {
         ...state,
         claims: [
           ...state.claims.filter((c) => c.itemId !== action.itemId),
-          { itemId: action.itemId, by: action.by },
-        ],
-        requests: state.requests.filter((r) => r.itemId !== action.itemId),
-      }
-    case 'REQUEST':
-      return { ...state, requests: [...state.requests, action.request] }
-    case 'APPROVE_REQUEST':
-      return {
-        ...state,
-        requests: state.requests.filter((r) => r.id !== action.requestId),
-        claims: [
-          ...state.claims.filter((c) => c.itemId !== action.itemId),
-          { itemId: action.itemId, by: action.by },
+          { itemId: action.itemId, by: action.by, paid: !!action.paid, amount: action.amount ?? 0 },
         ],
       }
-    case 'DECLINE_REQUEST':
-      return { ...state, requests: state.requests.filter((r) => r.id !== action.requestId) }
     case 'MARK_PICKED':
       return { ...state, items: state.items.filter((i) => i.id !== action.itemId) }
     case 'ACCEPT_DONATION':
@@ -81,7 +66,7 @@ function reducer(state, action) {
         ),
       }
     case 'RESET_DEMO':
-      return { user: null, items: SEED_ITEMS, claims: [], requests: [] }
+      return { user: null, items: SEED_ITEMS, claims: [] }
     default:
       return state
   }
@@ -98,11 +83,8 @@ export function StoreProvider({ children }) {
     const actions = {
       setUser: (user) => dispatch({ type: 'SET_USER', user }),
       addItem: (item) => dispatch({ type: 'ADD_ITEM', item }),
-      claimItem: (itemId, by) => dispatch({ type: 'CLAIM', itemId, by }),
-      requestItem: (request) => dispatch({ type: 'REQUEST', request }),
-      approveRequest: (itemId, requestId, by) =>
-        dispatch({ type: 'APPROVE_REQUEST', itemId, requestId, by }),
-      declineRequest: (requestId) => dispatch({ type: 'DECLINE_REQUEST', requestId }),
+      claimItem: (itemId, by, opts = {}) =>
+        dispatch({ type: 'CLAIM', itemId, by, paid: opts.paid, amount: opts.amount }),
       markPicked: (itemId) => dispatch({ type: 'MARK_PICKED', itemId }),
       acceptDonation: (itemId) => dispatch({ type: 'ACCEPT_DONATION', itemId }),
       payDonationFee: (itemId) => dispatch({ type: 'PAY_DONATION_FEE', itemId }),

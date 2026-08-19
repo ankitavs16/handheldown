@@ -1,8 +1,10 @@
 import { Link, useNavigate } from 'react-router-dom'
 import { useStore } from '../store'
+import { useMode, toggleMode } from '../mode'
 
 export default function Feed() {
   const { items, claims, currentUser } = useStore()
+  const mode = useMode()
   const navigate = useNavigate()
 
   // Donations are private — they only ever show up in the admin inbox.
@@ -18,6 +20,13 @@ export default function Feed() {
           <p className="text-sm text-inksoft">Gently used things, one building over.</p>
         </div>
         <div className="flex items-center gap-2">
+          <button
+            onClick={toggleMode}
+            title={mode === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+            className="btn btn-circle btn-xs bg-cream text-inksoft border-none hover:bg-blush"
+          >
+            {mode === 'dark' ? '☾' : '☀'}
+          </button>
           <span className="bg-cream text-inksoft text-xs font-bold rounded-full px-3 py-1">
             {visible.length} {visible.length === 1 ? 'item' : 'items'}
           </span>
@@ -66,11 +75,13 @@ function ItemCard({ item, claimedBy, currentUser }) {
           <span className="absolute top-2 left-2 bg-sand/95 rounded-full px-2.5 py-1 text-xs font-semibold text-ink shadow-sm">
             {item.condition}
           </span>
-          {item.isDonation && (
-            <span className="absolute top-2 right-2 bg-sun text-white rounded-full px-2.5 py-1 text-xs font-bold shadow-sm">
-              ♥ Free
-            </span>
-          )}
+          <span
+            className={`absolute top-2 right-2 rounded-full px-2.5 py-1 text-xs font-bold shadow-sm ${
+              Number(item.price) > 0 ? 'bg-coral text-white' : 'bg-leaf text-white'
+            }`}
+          >
+            {Number(item.price) > 0 ? `₹${item.price}` : 'Free'}
+          </span>
         </div>
         <div className="p-3">
           <h3 className="font-display font-bold text-ink leading-snug">{item.title}</h3>

@@ -19,25 +19,6 @@ export function Done() {
   )
 }
 
-export function Requested() {
-  const navigate = useNavigate()
-  return (
-    <StatusShell>
-      <div className="text-6xl mb-3">💌</div>
-      <h1 className="font-display font-extrabold text-2xl text-ink">Request sent!</h1>
-      <p className="text-sm text-inksoft mt-3 leading-relaxed">
-        The poster has your note. If they approve, the item is yours — you'll see it in your My Items
-        page. No approval? No worries, the feed is full of good stuff 🏷
-      </p>
-      <div className="mt-4 bg-paper rounded-xl p-3 text-left">
-        <p className="text-xs text-inksoft">Keep an eye on</p>
-        <p className="text-sm text-ink font-semibold">My items → for the 'Approved' alert</p>
-      </div>
-      <PrimaryButton onClick={() => navigate('/mine')}>Go to my items</PrimaryButton>
-    </StatusShell>
-  )
-}
-
 export function DonePost() {
   const navigate = useNavigate()
   return (

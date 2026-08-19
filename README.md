@@ -1,21 +1,23 @@
 # handheldown
 
 A hand-me-down app for buildings: post things you don't need, claim things you do,
-request items before they're gone, and donate things straight to us.
+price 0 (free) or set your own price with a checkout, and donate things straight to us.
 
 Rebuilt from the deployed build at `handheldown.vercel.app`, with new features added.
 
 ## Features
 
 - **The hallway stash** — 2-column feed of gently used items from your building.
-- **Claim now** — first come, first served (`I want this!`).
-- **Request instead** — send the poster a note; they approve or decline in My Items.
-- **My items** — track claims, approve/decline requests, mark drop-off complete.
+- **Your price, your call** — posters set their own price in ₹; `0` means hand it down for free.
+- **Checkout** — priced items go to a checkout page (`/checkout/:id`) to pay before claiming.
+  Demo mode simulates UPI / card — no real money moves.
+- **Claim now** — first come, first served. Free items claim instantly.
+- **My items** — track claims (with paid amount), mark drop-off complete.
 - **Donations** — private by design.
   - Donated items never appear on the public feed.
   - They land in a PIN-gated **Donation inbox** (`🔒` on the feed, or `/admin`).
-  - Accepting a donation bills the donor a small **pickup fee** ("pay us so we can take it").
-- **Payments** — Stripe Payment Links (or a built-in demo checkout).
+  - Accepting a donation bills the donor a small **pickup fee** (₹50) — paid via the demo modal.
+- **Dark / light mode** — toggle on the feed and on the welcome screen; remembered per device.
 - **5 themes** — switch looks with `?variant=handmedown|handmeup|stash|regifted|room101`.
 
 ## Run locally
@@ -26,33 +28,32 @@ npm run dev      # http://localhost:5173
 npm run build    # production build in dist/
 ```
 
-## Take real payments (Stripe)
+## Payments
 
-The app ships in **demo mode** — checkout is simulated so you can test the whole flow.
+The app ships in **demo mode** (`PAYMENT_MODE = 'demo'` in `src/data.js`) — checkout is
+simulated so you can test the whole flow. Nothing is actually charged.
 
-To collect real money:
+To collect real money you'll need:
 
-1. Create a Payment Link at <https://dashboard.stripe.com/payment-links>.
-2. Put its URL in `src/data.js`:
+1. A payment provider account (e.g. **Stripe** or **Razorpay** for UPI).
+2. A tiny backend (a serverless function is enough) that creates a payment session /
+   intent for each order and returns a client secret.
+3. Wire that into the checkout flow (`src/components/CheckoutPage.jsx` and
+   `src/payment.jsx`) and flip `PAYMENT_MODE` to `'live'` in `src/data.js`.
 
-```js
-export const STRIPE_PAYMENT_LINK = 'https://buy.stripe.com/xxxxx'
-```
-
-3. Rebuild & deploy. Users now get sent to Stripe to pay the fee; after paying they
-   tap "I've paid — continue".
-
-Everything you configure (fee amount, currency, admin PIN) lives at the top of `src/data.js`.
+Everything else you configure (pickup fee, currency, admin PIN) lives at the top of `src/data.js`.
 
 ## Where things are
 
 | File | Purpose |
 | --- | --- |
-| `src/data.js` | fee, Stripe link, admin PIN, seed items, themes |
+| `src/data.js` | pickup fee, payment mode, admin PIN, seed items, themes |
 | `src/store.jsx` | app state (persisted to localStorage) |
-| `src/payment.jsx` | checkout modal + demo payment |
+| `src/payment.jsx` | donation-fee checkout modal + ₹ formatter |
+| `src/components/CheckoutPage.jsx` | buyer checkout page (`/checkout/:id`) |
+| `src/mode.js` | dark/light mode (persisted) |
 | `src/components/` | every screen |
-| `e2e/e2e.cjs` | end-to-end test (16 checks) |
+| `e2e/e2e.cjs` | end-to-end test (18 checks) |
 
 ## Deploy
 

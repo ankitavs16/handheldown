@@ -1,16 +1,15 @@
 import { useState } from 'react'
-import { DONATION_FEE, STRIPE_PAYMENT_LINK } from './data'
+import { DONATION_FEE, PAYMENT_MODE } from './data'
 
 /**
  * Checkout for "pay us" fees (currently the donation pickup fee).
  *
  * Real money:
- *   Set STRIPE_PAYMENT_LINK in src/data.js to your Stripe Payment Link URL.
- *   Users are sent to Stripe to pay; after paying they tap "I've paid" and the
- *   flow continues. No server required — Stripe sends you the money directly.
+ *   PAYMENT_MODE === 'live' requires a payment provider account (Stripe/Razorpay)
+ *   plus a small backend to create a payment session — see README.
  *
  * Demo mode (default):
- *   STRIPE_PAYMENT_LINK is empty, so checkout is simulated in a modal.
+ *   PAYMENT_MODE === 'demo' -> checkout is simulated in-app. No real money moves.
  */
 export function useCheckout() {
   const [config, setConfig] = useState(null)
@@ -37,7 +36,6 @@ export function useCheckout() {
 
 function CheckoutDialog({ itemTitle, amountLabel, purpose, onClose, onDone }) {
   const [paying, setPaying] = useState(false)
-  const [stripeOpened, setStripeOpened] = useState(false)
 
   const startDemoPay = () => {
     setPaying(true)
@@ -70,36 +68,25 @@ function CheckoutDialog({ itemTitle, amountLabel, purpose, onClose, onDone }) {
           </div>
         </div>
 
-        {STRIPE_PAYMENT_LINK ? (
+        {PAYMENT_MODE === 'live' ? (
           <div className="mt-5 space-y-2">
-            <a
-              href={STRIPE_PAYMENT_LINK}
-              target="_blank"
-              rel="noreferrer"
-              onClick={() => setStripeOpened(true)}
-              className="btn btn-lg rounded-full w-full bg-coral border-coral text-white font-display font-bold shadow-card hover:bg-coraldeep"
-            >
-              Pay with card (Stripe)
-            </a>
-            {stripeOpened && (
-              <button
-                onClick={onDone}
-                className="btn btn-lg rounded-full w-full bg-leaf border-leaf text-white font-display font-bold hover:opacity-90"
-              >
-                I've paid — continue
-              </button>
-            )}
-            <p className="text-center text-xs text-inksoft">
-              A secure Stripe checkout opens in a new tab.
+            <p className="text-xs text-inksoft">
+              Real payment provider is not configured. In <code className="text-coraldeep">demo</code>{' '}
+              mode the payment is simulated.
             </p>
+            <button
+              onClick={startDemoPay}
+              disabled={paying}
+              className="btn btn-lg rounded-full w-full bg-coral border-coral text-white font-display font-bold shadow-card hover:bg-coraldeep disabled:opacity-60"
+            >
+              {paying ? 'Processing…' : `Pay ${amountLabel} (demo)`}
+            </button>
           </div>
         ) : (
           <div className="mt-5 space-y-2">
             <div className="bg-sand rounded-xl p-3 text-xs text-inksoft leading-relaxed">
-              <b className="text-ink">Demo mode.</b> No real money moves yet. Set{' '}
-              <code className="text-coraldeep">STRIPE_PAYMENT_LINK</code> in{' '}
-              <code className="text-coraldeep">src/data.js</code> to accept real card payments via
-              Stripe Payment Links.
+              <b className="text-ink">Demo mode.</b> No real money moves yet. To accept real
+              payments you need a payment provider account plus a tiny backend (see README).
             </div>
             <button
               onClick={startDemoPay}
@@ -117,4 +104,9 @@ function CheckoutDialog({ itemTitle, amountLabel, purpose, onClose, onDone }) {
 
 export function feeSummary() {
   return DONATION_FEE.label
+}
+
+/** Format a rupee amount, e.g. 50 -> "₹50". */
+export function money(n) {
+  return `₹${Number(n) || 0}`
 }

@@ -1,4 +1,4 @@
-export const VARIANTS = {
+﻿export const VARIANTS = {
   handmedown: {
     id: 'handmedown',
     name: 'Hand-Me-Down',
@@ -61,22 +61,22 @@ export const CONDITIONS = ['Like new', 'Good', 'Worn']
  * ------------------------------------------------------------------ */
 
 // What "we" charge to take a donated item off the donor's hands.
-// Amount is in your chosen currency; change freely.
-export const DONATION_FEE = { amount: 2, currency: 'USD', label: '$2' }
+export const DONATION_FEE = { amount: 50, currency: 'INR', label: '₹50' }
 
-// Drop a real Stripe Payment Link here and donations get real payments.
-// Leave empty ("") to stay in demo mode (simulated payment inside the app).
-// How to make one: https://dashboard.stripe.com/payment-links
-export const STRIPE_PAYMENT_LINK = ''
+// Payment mode.
+//   'demo' -> in-app simulated checkout (card / UPI) — no real money moves.
+//   For real payments you'll need a payment provider account (Stripe/Razorpay)
+//   and a tiny backend to create payment sessions. See README.
+export const PAYMENT_MODE = 'demo'
 
 // PIN for the admin view (donation inbox). Change this before sharing.
 export const ADMIN_PIN = '1234'
 
 /* ------------------------------------------------------------------ *
  * Seed items
+ *   price: 0 means hand it down for free; otherwise the poster's price in ₹
  *   status:
  *     'available'  -> listed on the feed (public)
- *     'claimed'    -> someone claimed it (kept for history)
  *     'accepted'   -> donation accepted by us; donor still owes the fee
  *     'donated'    -> donation completed, collected by us
  *   isDonation: true -> hidden from the public feed; admin inbox only
@@ -93,6 +93,7 @@ export const SEED_ITEMS = [
     photo: 'https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&w=600&q=70',
     postedBy: 'Aisha R.',
     isDonation: true,
+    price: 0,
     status: 'available',
     donationFeePaid: false,
   },
@@ -105,6 +106,7 @@ export const SEED_ITEMS = [
     photo: 'https://images.unsplash.com/photo-1583485088034-697b5bc54ccd?auto=format&fit=crop&w=600&q=70',
     postedBy: 'Carlos M.',
     isDonation: false,
+    price: 30,
     status: 'available',
     donationFeePaid: false,
   },
@@ -117,6 +119,7 @@ export const SEED_ITEMS = [
     photo: 'https://images.unsplash.com/photo-1594223274512-ad4803739b7c?auto=format&fit=crop&w=600&q=70',
     postedBy: 'Priya K.',
     isDonation: true,
+    price: 0,
     status: 'available',
     donationFeePaid: false,
   },
@@ -129,6 +132,7 @@ export const SEED_ITEMS = [
     photo: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=600&q=70',
     postedBy: 'Diego F.',
     isDonation: false,
+    price: 150,
     status: 'available',
     donationFeePaid: false,
   },
@@ -141,6 +145,7 @@ export const SEED_ITEMS = [
     photo: 'https://images.unsplash.com/photo-1620012253295-c15cc3e65df4?auto=format&fit=crop&w=600&q=70',
     postedBy: 'Maya T.',
     isDonation: false,
+    price: 0,
     status: 'available',
     donationFeePaid: false,
   },
@@ -153,6 +158,7 @@ export const SEED_ITEMS = [
     photo: 'https://images.unsplash.com/photo-1491309055486-24ae511c15c7?auto=format&fit=crop&w=600&q=70',
     postedBy: 'Jonah W.',
     isDonation: true,
+    price: 0,
     status: 'available',
     donationFeePaid: false,
   },

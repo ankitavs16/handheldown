@@ -1,20 +1,11 @@
 import { useNavigate } from 'react-router-dom'
 import { useStore } from '../store'
-import { useCheckout, feeSummary } from '../payment'
+import { useCheckout, feeSummary, money } from '../payment'
 import { DONATION_FEE } from '../data'
 
 export default function MyItems() {
   const navigate = useNavigate()
-  const {
-    currentUser,
-    items,
-    claims,
-    requests,
-    markPicked,
-    approveRequest,
-    declineRequest,
-    payDonationFee,
-  } = useStore()
+  const { currentUser, items, claims, markPicked, payDonationFee } = useStore()
 
   const { CheckoutModal, openCheckout } = useCheckout()
 
@@ -39,7 +30,6 @@ export default function MyItems() {
   const publicPosts = mine.filter((i) => !i.isDonation)
   const donations = mine.filter((i) => i.isDonation)
   const claimFor = (id) => claims.find((c) => c.itemId === id)
-  const requestsFor = (id) => requests.filter((r) => r.itemId === id)
 
   const renderDonationStatus = (item) => {
     if (item.status === 'donated' && item.donationFeePaid) {
@@ -101,7 +91,6 @@ export default function MyItems() {
         <div className="space-y-3">
           {mine.map((item) => {
             const claim = claimFor(item.id)
-            const reqs = requestsFor(item.id)
             const isDonation = item.isDonation
             return (
               <div
@@ -126,6 +115,7 @@ export default function MyItems() {
                         ? (
                             <p className="mt-1 text-sm font-bold text-leaf">
                               ✓ Claimed by {claim.by.name} ({claim.by.room})
+                              {claim.paid ? ` · paid ${money(claim.amount)}` : ' · no payment'}
                             </p>
                           )
                         : (
@@ -144,37 +134,6 @@ export default function MyItems() {
                   </div>
                 ) : (
                   <div className="px-3 pb-3 space-y-2">
-                    {reqs.length > 0 && (
-                      <div className="bg-paper rounded-xl p-3">
-                        <p className="text-xs font-bold text-inksoft mb-2">
-                          {reqs.length} {reqs.length === 1 ? 'request' : 'requests'} 💌
-                        </p>
-                        {reqs.map((r) => (
-                          <div key={r.id} className="bg-sand rounded-xl p-2 mb-2 last:mb-0">
-                            <p className="text-xs font-bold text-ink">
-                              {r.by.name} · {r.by.room}
-                            </p>
-                            {r.note && <p className="text-xs text-inksoft mt-0.5 italic">"{r.note}"</p>}
-                            <div className="flex gap-2 mt-2">
-                              <button
-                                onClick={() =>
-                                  approveRequest(item.id, r.id, { name: r.by.name, room: r.by.room })
-                                }
-                                className="btn btn-xs rounded-full flex-1 bg-leaf border-leaf text-white font-bold hover:opacity-90"
-                              >
-                                Approve ✓
-                              </button>
-                              <button
-                                onClick={() => declineRequest(r.id)}
-                                className="btn btn-xs rounded-full flex-1 bg-cream border-cream text-inksoft font-bold"
-                              >
-                                Decline
-                              </button>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    )}
                     {claim ? (
                       <button
                         onClick={() => markPicked(item.id)}

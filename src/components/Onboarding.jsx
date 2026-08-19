@@ -3,11 +3,13 @@ import { useNavigate } from 'react-router-dom'
 import { useStore } from '../store'
 import { getVariant } from '../variant'
 import { VARIANTS } from '../data'
+import { useMode, toggleMode } from '../mode'
 
 export default function Onboarding() {
   const { user, setUser } = useStore()
   const navigate = useNavigate()
   const variant = getVariant()
+  const mode = useMode()
   const [name, setName] = useState(user ? user.name : '')
   const [room, setRoom] = useState(user ? user.room : null)
   const [showVariants, setShowVariants] = useState(false)
@@ -24,7 +26,7 @@ export default function Onboarding() {
     <div className="px-5 pt-12 min-h-screen flex flex-col">
       <div className="text-center mb-8">
         <div className="inline-flex items-center gap-1 select-none">
-          <span className="bg-coral !text-white font-display font-bold px-3 py-1 rounded-full text-sm rotate-[-4deg] shadow-sm">
+          <span className="bg-gradient-to-r from-blue-500 to-purple-500 !text-white font-display font-bold px-3 py-1 rounded-full text-sm rotate-[-4deg] shadow-sm">
             {variant.name}
           </span>
           <span className="font-display font-bold text-xl text-ink">{variant.logo}</span>
@@ -83,6 +85,12 @@ export default function Onboarding() {
       </p>
 
       <div className="mt-8 mb-4 text-center">
+        <button
+          onClick={toggleMode}
+          className="btn btn-sm rounded-full bg-cream text-inksoft border-none hover:bg-blush mb-3"
+        >
+          {mode === 'dark' ? '☾ Switch to light' : '☀ Switch to dark'}
+        </button>
         <button
           onClick={() => setShowVariants((v) => !v)}
           className="text-[11px] text-inksoft underline underline-offset-2 opacity-70 hover:opacity-100"

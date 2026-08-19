@@ -185,3 +185,40 @@ html[data-variant="room101"] {
 html[data-variant="room101"] .tag-card {
   border: 1px solid #3d7a522e;
 }
+
+/* ------------------------------------------------------------------ *
+ * Dark / light mode
+ * These sit AFTER the variant palettes so <html data-mode="dark">
+ * (same specificity, declared later) wins. Corner colors come from the
+ * inline style set in main.jsx, so the accent only brightens via the
+ * user-preference media query below.
+ * ------------------------------------------------------------------ */
+
+html[data-mode="dark"] {
+  --color-paper: #151210;
+  --color-sand: #1f1a16;
+  --color-cream: #2b231d;
+  --color-ink: #f3e8db;
+  --color-inksoft: #a2947f;
+  --color-leaf: #5dbb8d;
+  --color-sun: #f2b04c;
+  --tag-shadow: 0 4px 6px -2px #00000066, 0 14px 24px -10px #00000080;
+}
+
+html[data-mode="dark"] body {
+  background: var(--color-paper);
+  color: var(--color-ink);
+}
+
+html[data-mode="dark"] .tag-card::before {
+  background: var(--color-paper);
+}
+
+html[data-mode="dark"] .shadow-card {
+  box-shadow: var(--tag-shadow);
+}
+
+html[data-mode="dark"] .bg-ink {
+  background: var(--color-ink);
+  color: var(--color-paper);
+}

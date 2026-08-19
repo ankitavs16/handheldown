@@ -7,7 +7,7 @@ const ADMIN_KEY = 'handheldown:admin'
 
 export default function Admin() {
   const navigate = useNavigate()
-  const { items, claims, requests, acceptDonation } = useStore()
+  const { items, claims, acceptDonation } = useStore()
   const [unlocked, setUnlocked] = useState(() => sessionStorage.getItem(ADMIN_KEY) === '1')
   const [pin, setPin] = useState('')
   const [error, setError] = useState('')
@@ -59,12 +59,7 @@ export default function Admin() {
   }
 
   const donations = items.filter((i) => i.isDonation)
-  const recentActivity = [
-    ...claims.map((c) => ({ kind: 'claim', text: `${c.by.name} claimed`, ...c })),
-    ...requests.map((r) => ({ kind: 'request', text: `${r.by.name} requested`, ...r })),
-  ].sort((a, b) =>
-    String(b.id || b.itemId || '').localeCompare(String(a.id || a.itemId || '')),
-  )
+  const recentActivity = claims.map((c) => ({ kind: 'claim', text: `${c.by.name} claimed`, ...c }))
   const donationStatus = (d) => {
     if (d.status === 'donated') return { label: '✓ Collected by us', tone: 'text-leaf' }
     if (d.status === 'accepted') return { label: '⏳ Awaiting donor payment', tone: 'text-sun' }
@@ -152,10 +147,7 @@ export default function Admin() {
         <div className="space-y-2 mb-8">
           {recentActivity.slice(0, 10).map((a, i) => (
             <div key={i} className="bg-paper rounded-xl px-3 py-2 text-sm text-ink">
-              <span className={a.kind === 'claim' ? 'text-leaf font-bold' : 'text-coral font-bold'}>
-                {a.kind === 'claim' ? '✓' : '💌'}
-              </span>{' '}
-              {a.text}
+              <span className="text-leaf font-bold">✓</span> {a.text}
             </div>
           ))}
         </div>

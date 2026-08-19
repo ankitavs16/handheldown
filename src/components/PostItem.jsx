@@ -10,6 +10,7 @@ export default function PostItem() {
   const [type, setType] = useState(TYPES[0])
   const [condition, setCondition] = useState(CONDITIONS[1])
   const [description, setDescription] = useState('')
+  const [price, setPrice] = useState('')
   const [isDonation, setIsDonation] = useState(false)
   const [error, setError] = useState('')
 
@@ -17,6 +18,7 @@ export default function PostItem() {
     if (!title.trim()) {
       return setError('Give it a short title — like "Blue winter jacket".')
     }
+    const priceNum = isDonation ? 0 : Math.max(0, Math.round(Number(price) || 0))
     const item = {
       id: 'p' + Date.now() + Math.floor(Math.random() * 1000),
       title: title.trim(),
@@ -27,6 +29,7 @@ export default function PostItem() {
         'https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&w=600&q=70',
       postedBy: currentUser ? currentUser.name : 'You',
       isDonation,
+      price: priceNum,
       status: 'available',
       donationFeePaid: false,
     }
@@ -90,6 +93,30 @@ export default function PostItem() {
               <option key={c}>{c}</option>
             ))}
           </select>
+        </div>
+
+        <div>
+          <label className="font-display font-semibold text-sm text-ink">
+            Your price in ₹
+          </label>
+          <div className="flex items-center gap-2 mt-1">
+            <span className="font-display font-bold text-lg text-inksoft">₹</span>
+            <input
+              type="number"
+              min="0"
+              inputMode="numeric"
+              value={price}
+              onChange={(e) => setPrice(e.target.value)}
+              placeholder={isDonation ? '0 (it’s a donation)' : '0 = free'}
+              disabled={isDonation}
+              className="input input-bordered w-full rounded-xl bg-paper border-cream focus:border-coral focus:outline-none disabled:opacity-50"
+            />
+          </div>
+          <p className="text-xs text-inksoft mt-1">
+            {isDonation
+              ? 'Donations are always free — no price needed.'
+              : 'Set your own price. 0 means hand it down for free. The claimer pays you at checkout.'}
+          </p>
         </div>
 
         <div>
