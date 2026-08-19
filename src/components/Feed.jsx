@@ -1,10 +1,12 @@
 import { Link, useNavigate } from 'react-router-dom'
 import { useStore } from '../store'
 import { useMode, toggleMode } from '../mode'
+import { getVariant } from '../variant'
 
 export default function Feed() {
   const { items, claims, currentUser } = useStore()
   const mode = useMode()
+  const variant = getVariant()
   const navigate = useNavigate()
 
   // Donations are private — they only ever show up in the admin inbox.
@@ -14,10 +16,17 @@ export default function Feed() {
 
   return (
     <div className="px-4 pt-6">
-      <div className="flex items-end justify-between mb-4">
-        <div>
-          <h1 className="font-display font-extrabold text-2xl text-ink">The hallway stash</h1>
-          <p className="text-sm text-inksoft">Gently used things, one building over.</p>
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center gap-3">
+          <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-blue-400 to-purple-400 text-white flex items-center justify-center text-xl shadow-sm shrink-0 rotate-[-4deg]">
+            {variant.logo}
+          </div>
+          <div>
+            <h1 className="font-display font-extrabold text-2xl text-ink leading-tight">
+              The hallway stash
+            </h1>
+            <p className="text-sm text-inksoft">Gently used things, one building over.</p>
+          </div>
         </div>
         <div className="flex items-center gap-2">
           <button
@@ -72,7 +81,8 @@ function ItemCard({ item, claimedBy, currentUser }) {
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
             loading="lazy"
           />
-          <span className="absolute top-2 left-2 bg-sand/95 rounded-full px-2.5 py-1 text-xs font-semibold text-ink shadow-sm">
+          <div className="absolute inset-0 bg-gradient-to-t from-[#4a4e6e33] via-transparent to-transparent" />
+          <span className="absolute top-2 left-2 bg-white/90 backdrop-blur rounded-full px-2.5 py-1 text-xs font-semibold text-ink shadow-sm">
             {item.condition}
           </span>
           <span
