@@ -3,16 +3,16 @@
 @plugin "daisyui" { themes: false; logs: false; }
 
 @theme {
-  --color-paper: #faf4e9;
-  --color-sand: #fffaf1;
-  --color-cream: #f3e8d5;
-  --color-ink: #3d3527;
-  --color-inksoft: #6f6553;
-  --color-coral: #e4572e;
-  --color-coraldeep: #c63e17;
-  --color-leaf: #3e8e67;
-  --color-sun: #f2a73b;
-  --color-blush: #fce4d4;
+  --color-paper: #f6f7fb;
+  --color-sand: #ffffff;
+  --color-cream: #e8ecf6;
+  --color-ink: #222b4a;
+  --color-inksoft: #67718f;
+  --color-coral: #3f5fe0;
+  --color-coraldeep: #2e47b0;
+  --color-leaf: #8b5cf6;
+  --color-sun: #8b5cf6;
+  --color-blush: #e9edfd;
   --font-display: "Baloo 2", ui-rounded, system-ui, sans-serif;
   --font-body: "Nunito", ui-sans-serif, system-ui, sans-serif;
 }
@@ -51,24 +51,24 @@ body {
 }
 
 .shadow-card {
-  box-shadow: var(--tag-shadow, 0 4px 6px -2px #3d35271f, 0 12px 20px -8px #3d35271a);
+  box-shadow: var(--tag-shadow, 0 4px 6px -2px #222b4a1f, 0 12px 20px -8px #222b4a14);
 }
 
 html[data-variant="handmedown"] {
-  --color-paper: #faf4e9;
-  --color-sand: #fffaf1;
-  --color-cream: #f3e8d5;
-  --color-ink: #3d3527;
-  --color-inksoft: #6f6553;
-  --color-coral: #e4572e;
-  --color-coraldeep: #c63e17;
-  --color-leaf: #3e8e67;
-  --color-sun: #f2a73b;
-  --color-blush: #fce4d4;
+  --color-paper: #f6f7fb;
+  --color-sand: #ffffff;
+  --color-cream: #e8ecf6;
+  --color-ink: #222b4a;
+  --color-inksoft: #67718f;
+  --color-coral: #3f5fe0;
+  --color-coraldeep: #2e47b0;
+  --color-leaf: #8b5cf6;
+  --color-sun: #8b5cf6;
+  --color-blush: #e9edfd;
   --font-display: "Baloo 2", ui-rounded, system-ui, sans-serif;
   --font-body: "Nunito", ui-sans-serif, system-ui, sans-serif;
   --tag-radius: 1.4rem 1.4rem 1.4rem 1.4rem;
-  --tag-shadow: 0 4px 6px -2px #3d35271f, 0 12px 20px -8px #3d35271a;
+  --tag-shadow: 0 4px 6px -2px #222b4a1f, 0 12px 20px -8px #222b4a14;
 }
 
 html[data-variant="handmeup"] {
@@ -195,13 +195,13 @@ html[data-variant="room101"] .tag-card {
  * ------------------------------------------------------------------ */
 
 html[data-mode="dark"] {
-  --color-paper: #151210;
-  --color-sand: #1f1a16;
-  --color-cream: #2b231d;
-  --color-ink: #f3e8db;
-  --color-inksoft: #a2947f;
-  --color-leaf: #5dbb8d;
-  --color-sun: #f2b04c;
+  --color-paper: #12141f;
+  --color-sand: #1b1e2d;
+  --color-cream: #2a2e44;
+  --color-ink: #eef0f8;
+  --color-inksoft: #9aa3c0;
+  --color-leaf: #a78bfa;
+  --color-sun: #a78bfa;
   --tag-shadow: 0 4px 6px -2px #00000066, 0 14px 24px -10px #00000080;
 }
 

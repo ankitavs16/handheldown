@@ -5,9 +5,9 @@
     tagline: 'Neighborly. Warm. Yours.',
     theme: 'classic',
     logo: '🏷',
-    accent: '#e4572e',
-    accentDeep: '#c63e17',
-    blush: '#fce4d4',
+    accent: '#3f5fe0',
+    accentDeep: '#2e47b0',
+    blush: '#e9edfd',
   },
   handmeup: {
     id: 'handmeup',
