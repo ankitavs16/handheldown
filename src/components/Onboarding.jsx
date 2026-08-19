@@ -26,7 +26,7 @@ export default function Onboarding() {
     <div className="px-5 pt-12 min-h-screen flex flex-col">
       <div className="text-center mb-8">
         <div className="inline-flex items-center gap-1 select-none">
-          <span className="bg-gradient-to-r from-blue-500 to-purple-500 !text-white font-display font-bold px-3 py-1 rounded-full text-sm rotate-[-4deg] shadow-sm">
+          <span className="bg-gradient-to-r from-blue-400 to-purple-400 !text-white font-display font-bold px-3 py-1 rounded-full text-sm rotate-[-4deg] shadow-sm">
             {variant.name}
           </span>
           <span className="font-display font-bold text-xl text-ink">{variant.logo}</span>

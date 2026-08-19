@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useMemo, useReducer } from 'react'
-import { SEED_ITEMS } from './data'
+import { SEED_ITEMS, SEED_CLAIMS } from './data'
 
 const STORAGE_KEY = 'handheldown:state:v2'
 
@@ -32,7 +32,7 @@ function initial() {
       claims: Array.isArray(saved.claims) ? saved.claims : [],
     }
   }
-  return { user: null, items: SEED_ITEMS, claims: [] }
+  return { user: null, items: SEED_ITEMS, claims: SEED_CLAIMS }
 }
 
 function reducer(state, action) {
@@ -66,7 +66,7 @@ function reducer(state, action) {
         ),
       }
     case 'RESET_DEMO':
-      return { user: null, items: SEED_ITEMS, claims: [] }
+      return { user: null, items: SEED_ITEMS, claims: SEED_CLAIMS }
     default:
       return state
   }

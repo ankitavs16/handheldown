@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useStore } from '../store'
-import { TYPES, CONDITIONS, DONATION_FEE } from '../data'
+import { TYPES, CONDITIONS, WEIGHT_CHOICES, donationFeeFor, GOOD_CAUSE, DONATION_RATE } from '../data'
 
 export default function PostItem() {
   const navigate = useNavigate()
@@ -12,6 +12,7 @@ export default function PostItem() {
   const [description, setDescription] = useState('')
   const [price, setPrice] = useState('')
   const [isDonation, setIsDonation] = useState(false)
+  const [weight, setWeight] = useState(WEIGHT_CHOICES[1])
   const [error, setError] = useState('')
 
   const submit = () => {
@@ -30,6 +31,7 @@ export default function PostItem() {
       postedBy: currentUser ? currentUser.name : 'You',
       isDonation,
       price: priceNum,
+      donationWeightKg: isDonation ? weight : undefined,
       status: 'available',
       donationFeePaid: false,
     }
@@ -132,9 +134,10 @@ export default function PostItem() {
 
         <label className="flex items-center justify-between bg-paper rounded-xl px-4 py-3 cursor-pointer">
           <div>
-            <p className="font-display font-semibold text-sm text-ink">Make it a donation ♥</p>
+            <p className="font-display font-semibold text-sm text-ink">Make it a donation 💛</p>
             <p className="text-xs text-inksoft">
-              Private — only our team sees it. Pickup fee {DONATION_FEE.label} to us, once accepted.
+              Private — only our team sees it. Fees start from approximate weight and go to a good
+              cause.
             </p>
           </div>
           <input
@@ -146,10 +149,36 @@ export default function PostItem() {
         </label>
 
         {isDonation && (
-          <div className="bg-blush/60 border-2 border-dashed border-coral/40 rounded-xl px-4 py-3 text-xs text-ink leading-relaxed">
-            <b>How donations work here:</b> your item will <b>not</b> appear on the public feed. It
-            goes to our donation inbox, and once we accept it, you'll pay the{' '}
-            <b>{DONATION_FEE.label}</b> pickup fee so we can take it off your hands.
+          <div className="space-y-3">
+            <div className="bg-blush/60 border-2 border-dashed border-coral/40 rounded-xl px-4 py-3 text-xs text-ink leading-relaxed">
+              <b>How donations work here:</b> your item will <b>not</b> appear on the public feed. It
+              goes to our donation inbox. Pick an <b>approximate weight</b> — our pickup fee is{' '}
+              <b>{DONATION_RATE.label}</b>, and once we accept it, you make that small donation so
+              we can take it off your hands.
+            </div>
+
+            <div>
+              <p className="font-display font-semibold text-sm text-ink">
+                Roughly how heavy is it?
+              </p>
+              <div className="flex flex-wrap gap-2 mt-2">
+                {WEIGHT_CHOICES.map((w) => (
+                  <button
+                    key={w}
+                    onClick={() => setWeight(w)}
+                    className={`btn btn-sm rounded-full font-display font-bold border-0 ${
+                      weight === w ? 'bg-coral text-white shadow-card' : 'bg-cream text-inksoft'
+                    }`}
+                  >
+                    ~{w} kg
+                  </button>
+                ))}
+              </div>
+              <p className="text-xs text-inksoft mt-2 leading-relaxed">
+                Your donation amount will be about <b>{donationFeeFor(weight).label}</b> — it goes to{' '}
+                <b>{GOOD_CAUSE.name}</b>: {GOOD_CAUSE.blurb}
+              </p>
+            </div>
           </div>
         )}
       </div>

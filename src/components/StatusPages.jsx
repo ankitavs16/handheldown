@@ -46,8 +46,9 @@ export function DonationPosted() {
       <h1 className="font-display font-extrabold text-2xl text-ink">Thanks for donating!</h1>
       <p className="text-sm text-inksoft mt-3 leading-relaxed">
         Your item is <b>not</b> on the public feed — it went straight to our private donation inbox.
-        When our team accepts it, you'll get a notification here to pay the small pickup fee, then we
-        take it from there 💚
+        When our team accepts it, you'll make a small donation based on its approximate weight, and
+        it goes to a <b>good cause</b> — school kits, books and supplies for families who need them
+        💚
       </p>
       <div className="mt-4 bg-paper rounded-xl p-3 text-left">
         <p className="text-xs text-inksoft">Next step</p>

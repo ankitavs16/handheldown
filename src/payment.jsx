@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { DONATION_FEE, PAYMENT_MODE } from './data'
+import { PAYMENT_MODE, donationFeeFor } from './data'
 
 /**
  * Checkout for "pay us" fees (currently the donation pickup fee).
@@ -102,8 +102,9 @@ function CheckoutDialog({ itemTitle, amountLabel, purpose, onClose, onDone }) {
   )
 }
 
-export function feeSummary() {
-  return DONATION_FEE.label
+/** Donation label for an item's approximate weight, e.g. "₹30". */
+export function donationFee(item) {
+  return donationFeeFor(item?.donationWeightKg).label
 }
 
 /** Format a rupee amount, e.g. 50 -> "₹50". */

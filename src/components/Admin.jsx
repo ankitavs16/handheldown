@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useStore } from '../store'
-import { ADMIN_PIN, DONATION_FEE } from '../data'
+import { ADMIN_PIN, GOOD_CAUSE, donationFeeFor } from '../data'
 
 const ADMIN_KEY = 'handheldown:admin'
 
@@ -89,8 +89,9 @@ export default function Admin() {
       </div>
 
       <p className="text-sm text-inksoft mb-4">
-        Donations stay hidden from the public feed until we take them. Accepting one bills the donor
-        the {DONATION_FEE.label} pickup fee.
+        Donations stay hidden from the public feed until we take them. Donor fees are based on the
+        item's approximate weight ({donationFeeFor(donations[0]?.donationWeightKg ?? 0).label} × kg)
+        and go to {GOOD_CAUSE.name}.
       </p>
 
       {donations.length === 0 ? (
@@ -125,13 +126,14 @@ export default function Admin() {
                       onClick={() => acceptDonation(d.id)}
                       className="btn btn-sm rounded-full w-full bg-sun border-sun text-white font-display font-bold hover:opacity-90"
                     >
-                      Accept from donor (bill {DONATION_FEE.label})
+                      Accept from donor (bill {donationFeeFor(d.donationWeightKg).label})
                     </button>
                   </div>
                 )}
                 {d.status === 'accepted' && (
                   <p className="px-3 pb-3 text-center text-xs text-inksoft">
-                    Donor was asked to pay the pickup fee. It'll flip to collected once paid.
+                    Donor was asked to donate {donationFeeFor(d.donationWeightKg).label} for a good
+                    cause. It'll flip to collected once paid.
                   </p>
                 )}
               </div>

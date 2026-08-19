@@ -1,4 +1,4 @@
-﻿export const VARIANTS = {
+export const VARIANTS = {
   handmedown: {
     id: 'handmedown',
     name: 'Hand-Me-Down',
@@ -60,8 +60,24 @@ export const CONDITIONS = ['Like new', 'Good', 'Worn']
  * Donations & payments
  * ------------------------------------------------------------------ */
 
-// What "we" charge to take a donated item off the donor's hands.
-export const DONATION_FEE = { amount: 50, currency: 'INR', label: '₹50' }
+// Donation pickup is priced by approximate weight and goes to a good
+// cause (school kits, books & supplies for families who need them).
+export const GOOD_CAUSE = {
+  name: 'Our charity partner',
+  blurb:
+    'Every pickup donation you make goes to a good cause — school kits, books and supplies for families who need them.',
+}
+
+// Rough rate. Pick an approximate weight; the fee is rate x ~kg.
+export const DONATION_RATE = { amountPerKg: 30, currency: 'INR', label: '₹30/kg' }
+
+// Approximate weights a donor can pick from (in kg).
+export const WEIGHT_CHOICES = [0.5, 1, 2, 3, 5]
+
+export function donationFeeFor(weightKg) {
+  const amount = Math.round((DONATION_RATE.amountPerKg * (Number(weightKg) || 0)) * 100) / 100
+  return { amount, label: `₹${amount}` }
+}
 
 // Payment mode.
 //   'demo' -> in-app simulated checkout (card / UPI) — no real money moves.
@@ -73,13 +89,14 @@ export const PAYMENT_MODE = 'demo'
 export const ADMIN_PIN = '1234'
 
 /* ------------------------------------------------------------------ *
- * Seed items
+ * Seed data
  *   price: 0 means hand it down for free; otherwise the poster's price in ₹
  *   status:
  *     'available'  -> listed on the feed (public)
- *     'accepted'   -> donation accepted by us; donor still owes the fee
+ *     'accepted'   -> donation accepted by us; donor still owes the donation
  *     'donated'    -> donation completed, collected by us
  *   isDonation: true -> hidden from the public feed; admin inbox only
+ *   donationWeightKg -> donor's approximate weight (drives the donation amount)
  * ------------------------------------------------------------------ */
 
 export const SEED_ITEMS = [
@@ -94,6 +111,7 @@ export const SEED_ITEMS = [
     postedBy: 'Aisha R.',
     isDonation: true,
     price: 0,
+    donationWeightKg: 1,
     status: 'available',
     donationFeePaid: false,
   },
@@ -120,6 +138,7 @@ export const SEED_ITEMS = [
     postedBy: 'Priya K.',
     isDonation: true,
     price: 0,
+    donationWeightKg: 1,
     status: 'available',
     donationFeePaid: false,
   },
@@ -159,7 +178,24 @@ export const SEED_ITEMS = [
     postedBy: 'Jonah W.',
     isDonation: true,
     price: 0,
+    donationWeightKg: 1,
     status: 'available',
     donationFeePaid: false,
+  },
+]
+
+/**
+ * Seed demo claims.
+ * Item 2 (gel pens, ₹30, posted by Carlos M.) ships pre-claimed AND paid so
+ * you can check the payment trail without running a checkout:
+ *   - sign in as Carlos M. -> My items shows "Claimed by Aisha R. · paid ₹30"
+ *   - the feed shows item 2 as claimed
+ */
+export const SEED_CLAIMS = [
+  {
+    itemId: '2',
+    by: { name: 'Aisha R.', room: 'Room 204' },
+    paid: true,
+    amount: 30,
   },
 ]

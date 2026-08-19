@@ -90,7 +90,7 @@ function ItemCard({ item, claimedBy, currentUser }) {
           </p>
           {claimed ? (
             <span className="mt-2 inline-flex items-center gap-1 text-xs font-bold text-leaf">
-              ✓ Claimed by {claimedBy.name}
+              ✓ Claimed by {claimedBy.by?.name}
             </span>
           ) : (
             <span className="mt-2 inline-flex items-center gap-1 text-xs font-bold text-coral">

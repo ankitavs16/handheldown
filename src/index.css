@@ -1,20 +1,20 @@
-@import url("https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700;800&family=Rajdhani:wght@400;500;600;700&family=Bebas+Neue&family=Archivo:wght@400;500;600;700&family=Fraunces:wght@300;400;500;600&family=Manrope:wght@400;500;600;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700;800&family=Rajdhani:wght@400;500;600;700&family=Bebas+Neue&family=Archivo:wght@400;500;600;700&family=Fraunces:wght@300;400;500;600&family=Manrope:wght@400;500;600;700;800&family=Fredoka:wght@400;500;600&family=Quicksand:wght@400;500;600;700&display=swap");
 @import "tailwindcss";
 @plugin "daisyui" { themes: false; logs: false; }
 
 @theme {
-  --color-paper: #f6f7fb;
+  --color-paper: #f8f9fe;
   --color-sand: #ffffff;
-  --color-cream: #e8ecf6;
-  --color-ink: #222b4a;
-  --color-inksoft: #67718f;
-  --color-coral: #3f5fe0;
-  --color-coraldeep: #2e47b0;
-  --color-leaf: #8b5cf6;
-  --color-sun: #8b5cf6;
-  --color-blush: #e9edfd;
-  --font-display: "Baloo 2", ui-rounded, system-ui, sans-serif;
-  --font-body: "Nunito", ui-sans-serif, system-ui, sans-serif;
+  --color-cream: #eef0fb;
+  --color-ink: #4a4e6e;
+  --color-inksoft: #8b90ab;
+  --color-coral: #7b97f2;
+  --color-coraldeep: #5f7be6;
+  --color-leaf: #9d8bf0;
+  --color-sun: #9d8bf0;
+  --color-blush: #eaeefc;
+  --font-display: "Fredoka", "Baloo 2", ui-rounded, system-ui, sans-serif;
+  --font-body: "Quicksand", "Nunito", ui-sans-serif, system-ui, sans-serif;
 }
 
 html {
@@ -51,24 +51,24 @@ body {
 }
 
 .shadow-card {
-  box-shadow: var(--tag-shadow, 0 4px 6px -2px #222b4a1f, 0 12px 20px -8px #222b4a14);
+  box-shadow: var(--tag-shadow, 0 4px 6px -2px #4a4e6e1f, 0 12px 20px -8px #4a4e6e14);
 }
 
 html[data-variant="handmedown"] {
-  --color-paper: #f6f7fb;
+  --color-paper: #f8f9fe;
   --color-sand: #ffffff;
-  --color-cream: #e8ecf6;
-  --color-ink: #222b4a;
-  --color-inksoft: #67718f;
-  --color-coral: #3f5fe0;
-  --color-coraldeep: #2e47b0;
-  --color-leaf: #8b5cf6;
-  --color-sun: #8b5cf6;
-  --color-blush: #e9edfd;
-  --font-display: "Baloo 2", ui-rounded, system-ui, sans-serif;
-  --font-body: "Nunito", ui-sans-serif, system-ui, sans-serif;
+  --color-cream: #eef0fb;
+  --color-ink: #4a4e6e;
+  --color-inksoft: #8b90ab;
+  --color-coral: #7b97f2;
+  --color-coraldeep: #5f7be6;
+  --color-leaf: #9d8bf0;
+  --color-sun: #9d8bf0;
+  --color-blush: #eaeefc;
+  --font-display: "Fredoka", "Baloo 2", ui-rounded, system-ui, sans-serif;
+  --font-body: "Quicksand", "Nunito", ui-sans-serif, system-ui, sans-serif;
   --tag-radius: 1.4rem 1.4rem 1.4rem 1.4rem;
-  --tag-shadow: 0 4px 6px -2px #222b4a1f, 0 12px 20px -8px #222b4a14;
+  --tag-shadow: 0 4px 6px -2px #4a4e6e1f, 0 12px 20px -8px #4a4e6e14;
 }
 
 html[data-variant="handmeup"] {
@@ -195,13 +195,13 @@ html[data-variant="room101"] .tag-card {
  * ------------------------------------------------------------------ */
 
 html[data-mode="dark"] {
-  --color-paper: #12141f;
-  --color-sand: #1b1e2d;
-  --color-cream: #2a2e44;
-  --color-ink: #eef0f8;
-  --color-inksoft: #9aa3c0;
-  --color-leaf: #a78bfa;
-  --color-sun: #a78bfa;
+  --color-paper: #171a28;
+  --color-sand: #20243a;
+  --color-cream: #2b3050;
+  --color-ink: #eef0fa;
+  --color-inksoft: #a6abca;
+  --color-leaf: #b3a4f4;
+  --color-sun: #b3a4f4;
   --tag-shadow: 0 4px 6px -2px #00000066, 0 14px 24px -10px #00000080;
 }
 
@@ -221,4 +221,35 @@ html[data-mode="dark"] .shadow-card {
 html[data-mode="dark"] .bg-ink {
   background: var(--color-ink);
   color: var(--color-paper);
+}
+
+/* ------------------------------------------------------------------ *
+ * Friendly, approachable controls
+ * ------------------------------------------------------------------ */
+
+/* Buttons are pill-round everywhere (unlayered, so it wins). */
+.btn,
+.btn-sm,
+.btn-lg,
+.btn-xs {
+  border-radius: 9999px;
+}
+
+/* Single-line inputs go pill-shaped too; multiline textareas stay soft. */
+.input,
+.select,
+.input-bordered,
+.select-bordered {
+  border-radius: 9999px;
+}
+
+.input-bordered,
+.select-bordered {
+  border-color: var(--color-cream);
+}
+
+.input:focus,
+.select:focus,
+.textarea:focus {
+  outline: none;
 }

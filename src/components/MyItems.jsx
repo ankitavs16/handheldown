@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import { useStore } from '../store'
-import { useCheckout, feeSummary, money } from '../payment'
-import { DONATION_FEE } from '../data'
+import { useCheckout, donationFee, money } from '../payment'
+import { GOOD_CAUSE } from '../data'
 
 export default function MyItems() {
   const navigate = useNavigate()
@@ -34,28 +34,35 @@ export default function MyItems() {
   const renderDonationStatus = (item) => {
     if (item.status === 'donated' && item.donationFeePaid) {
       return (
-        <p className="mt-1 text-sm font-bold text-leaf">✓ Collected by us — thank you!</p>
+        <>
+          <p className="mt-1 text-sm font-bold text-leaf">✓ Collected by us — thank you!</p>
+          <p className="mt-0.5 text-xs text-inksoft">
+            💛 Your donation went to a good cause: {GOOD_CAUSE.name}.
+          </p>
+        </>
       )
     }
     if (item.status === 'accepted') {
+      const fee = donationFee(item)
       return (
         <div className="mt-2">
           <p className="text-sm font-bold text-sun">We accepted your donation!</p>
           <p className="text-xs text-inksoft mt-0.5">
-            Pay the {feeSummary()} pickup fee and we'll take it from here.
+            Your donation is about {item.donationWeightKg} kg, so it's a {fee} donation for a good
+            cause — pay it and we'll take it from here.
           </p>
           <button
             onClick={() =>
               openCheckout({
                 itemTitle: item.title,
-                amountLabel: feeSummary(),
-                purpose: 'Donation pickup fee',
+                amountLabel: fee,
+                purpose: `Pickup donation · ${fee} · for a good cause`,
                 onPaid: () => payDonationFee(item.id),
               })
             }
             className="btn btn-sm rounded-full mt-2 w-full bg-sun border-sun text-white font-display font-bold hover:opacity-90"
           >
-            Pay {DONATION_FEE.label} pickup fee
+            Pay {fee} donation
           </button>
         </div>
       )
